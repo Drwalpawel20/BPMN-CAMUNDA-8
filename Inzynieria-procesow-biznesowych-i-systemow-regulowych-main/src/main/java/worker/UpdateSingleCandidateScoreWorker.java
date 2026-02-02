@@ -24,7 +24,7 @@ public class UpdateSingleCandidateScoreWorker {
     private static final Logger LOGGER = LoggerFactory.getLogger(UpdateSingleCandidateScoreWorker.class);
 
     private final DatabaseService databaseService;
-    private static final String API_KEY = "eyJvcmciOiI1YjNjZTM1OTc4NTExMTAwMDFjZjYyNDgiLCJpZCI6Ijk1YWRiYWNiMDMwYTQ1NmJhYzM3OTQzOTExMjBlMmVjIiwiaCI6Im11cm11cjY0In0=";
+    private static final String API_KEY = "YOUR GEO API KEY HERE";
     private static final HttpClient client = HttpClient.newHttpClient();
     private static final ObjectMapper mapper = new ObjectMapper();
 
