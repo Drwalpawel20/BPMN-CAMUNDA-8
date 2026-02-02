@@ -1,0 +1,118 @@
+{
+  "components": [
+    {
+      "label": "Imię",
+      "type": "textfield",
+      "layout": {
+        "row": "Row_0j78g2n",
+        "columns": null
+      },
+      "id": "Field_1dyh8ll",
+      "key": "first_name",
+      "placeholder": "Wprowadź imię",
+      "validate": {
+        "required": true
+      }
+    },
+    {
+      "label": "Nazwisko",
+      "type": "textfield",
+      "layout": {
+        "row": "Row_0kqy9zv",
+        "columns": null
+      },
+      "id": "Field_0c7csm0",
+      "key": "last_name",
+      "placeholder": "Wprowadź nazwisko",
+      "validate": {
+        "required": true
+      }
+    },
+    {
+      "label": "Numer indeksu",
+      "type": "textfield",
+      "layout": {
+        "row": "Row_0vjd6ya",
+        "columns": null
+      },
+      "id": "Field_1xadef8",
+      "key": "index",
+      "validate": {
+        "required": true,
+        "minLength": "5",
+        "maxLength": "5"
+      }
+    },
+    {
+      "label": "Typ Wnioskodawcy",
+      "values": [
+        {
+          "label": "Student",
+          "value": "student"
+        },
+        {
+          "label": "Profesor/Pracownik",
+          "value": "professor/staff"
+        },
+        {
+          "label": "Osoba z niepełnosprawnością",
+          "value": "disabled"
+        }
+      ],
+      "type": "select",
+      "layout": {
+        "row": "Row_1stljee",
+        "columns": null
+      },
+      "id": "Field_1ri3fpf",
+      "key": "applicantType",
+      "validate": {
+        "required": true
+      }
+    },
+    {
+      "label": "Email",
+      "type": "textfield",
+      "layout": {
+        "row": "Row_1hr0hjk",
+        "columns": null
+      },
+      "id": "Field_05e5n50",
+      "key": "email",
+      "validate": {
+        "required": true
+      }
+    },
+    {
+      "label": "Miasto",
+      "type": "textfield",
+      "description": "Pole przeznaczone wyłącznie dla studentów, którzy nie ubiegają się o miejsce parkingowe dla osób z niepełnosprawnością.",
+      "layout": {
+        "row": "Row_1hr0hjk",
+        "columns": null
+      },
+      "id": "Field_miasto_01",
+      "key": "miasto",
+      "validate": {
+        "required": false
+      }
+    },
+    {
+      "label": "Wyślij",
+      "action": "submit",
+      "type": "button",
+      "layout": {
+        "row": "Row_0ozqxs7",
+        "columns": null
+      },
+      "id": "Field_17n2s4c"
+    }
+  ],
+  "type": "default",
+  "id": "Form_0r5ej56",
+  "exporter": {
+    "name": "form-js (https://demo.bpmn.io)",
+    "version": "1.17.0"
+  },
+  "schemaVersion": 19
+}

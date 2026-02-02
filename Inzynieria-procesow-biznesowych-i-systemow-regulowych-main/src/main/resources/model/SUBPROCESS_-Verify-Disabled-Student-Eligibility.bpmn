@@ -1,0 +1,500 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:modeler="http://camunda.org/schema/modeler/1.0" xmlns:zeebe="http://camunda.org/schema/zeebe/1.0" xmlns:i18n="http://www.omg.org/spec/BPMN/non-normative/extensions/i18n/1.0" xmlns:signavio="http://www.signavio.com" id="sid-7fb4e01b-b762-4969-b7fa-eba43e3ff7f0" targetNamespace="http://www.signavio.com" expressionLanguage="http://www.w3.org/TR/XPath" exporter="Camunda Web Modeler" exporterVersion="8f56dcb" modeler:executionPlatform="Camunda Cloud" modeler:executionPlatformVersion="8.8.0" xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL http://www.omg.org/spec/BPMN/2.0/20100501/BPMN20.xsd">
+  <error id="sid-673c32f3-6664-49b5-8c47-e57d8eb12a0f" errorCode="error" />
+  <process id="Process_VerifyDisabledStudentEligibility" name="Verify Disabled Student Eligibility" processType="None" isClosed="false" isExecutable="true">
+    <extensionElements>
+      <signavio:signavioDiagramMetaData metaKey="revisionid" metaValue="d22e204a162d4946b77237866be1f082" />
+    </extensionElements>
+    <startEvent id="StartEvent_DisabledVerificationStarted" name="Disabled Student Verification Started">
+      <extensionElements>
+        <signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffff" />
+        <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000" />
+      </extensionElements>
+      <outgoing>Flow_Start_to_CheckStatus</outgoing>
+    </startEvent>
+    <exclusiveGateway id="Gateway_IsStudent" name="Is Student?" gatewayDirection="Diverging">
+      <extensionElements>
+        <signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffff" />
+        <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000" />
+        <signavio:signavioLabel bottom="false" left="false" ref="text_name" right="true" top="false" valign="middle" x="45.0" y="20.0" />
+      </extensionElements>
+      <incoming>Flow_CheckStatus_to_Gateway</incoming>
+      <outgoing>Flow_IsStudent_Yes</outgoing>
+      <outgoing>Flow_IsStudent_No</outgoing>
+    </exclusiveGateway>
+    <task id="Task_CheckStudentIDValidity" name="Check Student ID Validity">
+      <extensionElements>
+        <signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffcc" />
+        <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000" />
+      </extensionElements>
+      <incoming>Flow_IsStudent_Yes</incoming>
+      <outgoing>Flow_CheckID_to_Gateway</outgoing>
+    </task>
+    <exclusiveGateway id="Gateway_StudentIDValid" name="Student ID Valid?" gatewayDirection="Diverging">
+      <extensionElements>
+        <signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffff" />
+        <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000" />
+        <signavio:signavioLabel bottom="false" left="false" ref="text_name" right="true" top="false" valign="middle" x="45.0" y="20.0" />
+      </extensionElements>
+      <incoming>Flow_CheckID_to_Gateway</incoming>
+      <outgoing>Flow_IDValid_No</outgoing>
+      <outgoing>Flow_IDValid_Yes</outgoing>
+    </exclusiveGateway>
+    <task id="Task_CheckDisabilityCertificate" name="Check Disability Certificate">
+      <extensionElements>
+        <signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffcc" />
+        <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000" />
+      </extensionElements>
+      <incoming>Flow_IDValid_Yes</incoming>
+      <outgoing>Flow_CheckDisability_to_Gateway</outgoing>
+    </task>
+    <exclusiveGateway id="Gateway_DisabilityConfirmed" name="Disability Confirmed?" gatewayDirection="Diverging">
+      <extensionElements>
+        <signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffff" />
+        <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000" />
+        <signavio:signavioLabel align="center" bottom="true" left="false" ref="text_name" right="false" top="false" x="20.0" y="45.0" />
+      </extensionElements>
+      <incoming>Flow_CheckDisability_to_Gateway</incoming>
+      <outgoing>Flow_Disability_Confirmed_Yes</outgoing>
+      <outgoing>Flow_Disability_Confirmed_No</outgoing>
+    </exclusiveGateway>
+    <endEvent id="EndEvent_DisabledStudentVerified" name="Disabled Student Verified">
+      <extensionElements>
+        <signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffff" />
+        <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000" />
+      </extensionElements>
+      <incoming>Flow_Disability_Confirmed_Yes</incoming>
+    </endEvent>
+    <task id="Task_HandleEmailFailure_NotStudent" name="Handle Email Delivery Failure &#10;(Retry or Notify Administrator)">
+      <extensionElements>
+        <signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffcc" />
+        <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000" />
+      </extensionElements>
+      <incoming>Flow_NotStudentEmailError_to_Handler</incoming>
+      <outgoing>Flow_NotStudentHandler_to_LoggedEnd</outgoing>
+    </task>
+    <task id="Task_HandleEmailFailure_InvalidID" name="Handle Email Delivery Failure &#10;(Retry or Notify Administrator)">
+      <extensionElements>
+        <signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffcc" />
+        <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000" />
+      </extensionElements>
+      <incoming>Flow_InvalidIDEmailError_to_Handler</incoming>
+      <outgoing>Flow_InvalidIDHandler_to_LoggedEnd</outgoing>
+    </task>
+    <task id="Task_HandleEmailFailure_NoDisability" name="Handle Email Delivery Failure &#10;(Retry or Notify Administrator)">
+      <extensionElements>
+        <signavio:signavioMetaData metaKey="bgcolor" metaValue="#ffffcc" />
+        <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000" />
+      </extensionElements>
+      <incoming>Flow_NoDisabilityEmailError_to_Handler</incoming>
+      <outgoing>Flow_NoDisabilityHandler_to_LoggedEnd</outgoing>
+    </task>
+    <boundaryEvent id="BoundaryEvent_NoDisabilityEmailError" name="" attachedToRef="ServiceTask_SendRejectionNoDisability">
+      <outgoing>Flow_NoDisabilityEmailError_to_Handler</outgoing>
+      <errorEventDefinition id="ErrorEventDef_NoDisabilityEmail" errorRef="Error_EmailFailed" />
+    </boundaryEvent>
+    <boundaryEvent id="BoundaryEvent_NotStudentEmailError" name="" attachedToRef="ServiceTask_SendRejectionNotStudent">
+      <outgoing>Flow_NotStudentEmailError_to_Handler</outgoing>
+      <errorEventDefinition id="ErrorEventDef_NotStudentEmail" errorRef="Error_EmailFailed" />
+    </boundaryEvent>
+    <boundaryEvent id="BoundaryEvent_InvalidIDEmailError" name="" attachedToRef="ServiceTask_SendRejectionInvalidID">
+      <outgoing>Flow_InvalidIDEmailError_to_Handler</outgoing>
+      <errorEventDefinition id="ErrorEventDef_InvalidIDEmail" errorRef="Error_EmailFailed" />
+    </boundaryEvent>
+    <sequenceFlow id="Flow_Start_to_CheckStatus" name="" sourceRef="StartEvent_DisabledVerificationStarted" targetRef="ServiceTask_DisabledStudentCheckStatus">
+      <extensionElements>
+        <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000" />
+      </extensionElements>
+    </sequenceFlow>
+    <sequenceFlow id="Flow_CheckStatus_to_Gateway" name="" sourceRef="ServiceTask_DisabledStudentCheckStatus" targetRef="Gateway_IsStudent">
+      <extensionElements>
+        <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000" />
+      </extensionElements>
+    </sequenceFlow>
+    <sequenceFlow id="Flow_IsStudent_Yes" name="Yes" sourceRef="Gateway_IsStudent" targetRef="Task_CheckStudentIDValidity">
+      <extensionElements>
+        <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000" />
+      </extensionElements>
+      <conditionExpression xsi:type="tFormalExpression">=is_student=true
+</conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="Flow_NotStudent_to_End" name="" sourceRef="ServiceTask_SendRejectionNotStudent" targetRef="EndEvent_EligibilityFailed_NotStudent">
+      <extensionElements>
+        <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000" />
+      </extensionElements>
+    </sequenceFlow>
+    <sequenceFlow id="Flow_CheckID_to_Gateway" name="" sourceRef="Task_CheckStudentIDValidity" targetRef="Gateway_StudentIDValid">
+      <extensionElements>
+        <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000" />
+      </extensionElements>
+    </sequenceFlow>
+    <sequenceFlow id="Flow_InvalidID_to_End" name="" sourceRef="ServiceTask_SendRejectionInvalidID" targetRef="EndEvent_EligibilityFailed_InvalidID">
+      <extensionElements>
+        <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000" />
+      </extensionElements>
+    </sequenceFlow>
+    <sequenceFlow id="Flow_IDValid_No" name="No" sourceRef="Gateway_StudentIDValid" targetRef="ServiceTask_SendRejectionInvalidID">
+      <extensionElements>
+        <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000" />
+      </extensionElements>
+      <conditionExpression xsi:type="tFormalExpression">=student_id_valid=false</conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="Flow_CheckDisability_to_Gateway" name="" sourceRef="Task_CheckDisabilityCertificate" targetRef="Gateway_DisabilityConfirmed">
+      <extensionElements>
+        <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000" />
+      </extensionElements>
+    </sequenceFlow>
+    <sequenceFlow id="Flow_Disability_Confirmed_Yes" name="Yes" sourceRef="Gateway_DisabilityConfirmed" targetRef="EndEvent_DisabledStudentVerified">
+      <extensionElements>
+        <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000" />
+      </extensionElements>
+      <conditionExpression xsi:type="tFormalExpression">=is_disabled=true</conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="Flow_NoDisability_to_End" name="" sourceRef="ServiceTask_SendRejectionNoDisability" targetRef="EndEvent_EligibilityFailed_NoDisability">
+      <extensionElements>
+        <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000" />
+      </extensionElements>
+    </sequenceFlow>
+    <sequenceFlow id="Flow_IDValid_Yes" name="Yes" sourceRef="Gateway_StudentIDValid" targetRef="Task_CheckDisabilityCertificate">
+      <extensionElements>
+        <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000" />
+      </extensionElements>
+      <conditionExpression xsi:type="tFormalExpression">=student_id_valid=true</conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="Flow_NotStudentHandler_to_LoggedEnd" name="" sourceRef="Task_HandleEmailFailure_NotStudent" targetRef="EndEvent_EmailDeliveryFailureLogged_NotStudent">
+      <extensionElements>
+        <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000" />
+      </extensionElements>
+    </sequenceFlow>
+    <sequenceFlow id="Flow_InvalidIDHandler_to_LoggedEnd" name="" sourceRef="Task_HandleEmailFailure_InvalidID" targetRef="EndEvent_EmailDeliveryFailureLogged_InvalidID">
+      <extensionElements>
+        <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000" />
+      </extensionElements>
+    </sequenceFlow>
+    <sequenceFlow id="Flow_NoDisabilityHandler_to_LoggedEnd" name="" sourceRef="Task_HandleEmailFailure_NoDisability" targetRef="EndEvent_EmailDeliveryFailureLogged_NoDisability">
+      <extensionElements>
+        <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000" />
+      </extensionElements>
+    </sequenceFlow>
+    <sequenceFlow id="Flow_NoDisabilityEmailError_to_Handler" name="" sourceRef="BoundaryEvent_NoDisabilityEmailError" targetRef="Task_HandleEmailFailure_NoDisability">
+      <extensionElements>
+        <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000" />
+      </extensionElements>
+    </sequenceFlow>
+    <sequenceFlow id="Flow_NotStudentEmailError_to_Handler" name="" sourceRef="BoundaryEvent_NotStudentEmailError" targetRef="Task_HandleEmailFailure_NotStudent">
+      <extensionElements>
+        <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000" />
+      </extensionElements>
+    </sequenceFlow>
+    <sequenceFlow id="Flow_InvalidIDEmailError_to_Handler" name="" sourceRef="BoundaryEvent_InvalidIDEmailError" targetRef="Task_HandleEmailFailure_InvalidID">
+      <extensionElements>
+        <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000" />
+      </extensionElements>
+    </sequenceFlow>
+    <sequenceFlow id="Flow_IsStudent_No" name="No" sourceRef="Gateway_IsStudent" targetRef="ServiceTask_SendRejectionNotStudent">
+      <extensionElements>
+        <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000" />
+      </extensionElements>
+      <conditionExpression xsi:type="tFormalExpression">=is_student=false
+</conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="Flow_Disability_Confirmed_No" name="No" sourceRef="Gateway_DisabilityConfirmed" targetRef="ServiceTask_SendRejectionNoDisability">
+      <extensionElements>
+        <signavio:signavioMetaData metaKey="bordercolor" metaValue="#000000" />
+      </extensionElements>
+      <conditionExpression xsi:type="tFormalExpression">=is_disabled=false</conditionExpression>
+    </sequenceFlow>
+    <serviceTask id="ServiceTask_DisabledStudentCheckStatus" name="Check Student Status">
+      <extensionElements>
+        <zeebe:taskDefinition type="disabled-student-check-status" />
+      </extensionElements>
+      <incoming>Flow_Start_to_CheckStatus</incoming>
+      <outgoing>Flow_CheckStatus_to_Gateway</outgoing>
+    </serviceTask>
+    <serviceTask id="ServiceTask_SendRejectionNotStudent" name="Send Rejection Email – Not a Student">
+      <extensionElements>
+        <zeebe:taskDefinition type="send-decision-email" />
+        <zeebe:ioMapping>
+          <zeebe:input source="=&#34;Nie zlaleziono studenta o danych parametrach w bazie danych&#34;" target="decision" />
+        </zeebe:ioMapping>
+      </extensionElements>
+      <incoming>Flow_IsStudent_No</incoming>
+      <outgoing>Flow_NotStudent_to_End</outgoing>
+    </serviceTask>
+    <serviceTask id="ServiceTask_SendRejectionInvalidID" name="Send Rejection Email – Invalid Student ID">
+      <extensionElements>
+        <zeebe:taskDefinition type="send-decision-email" />
+        <zeebe:ioMapping>
+          <zeebe:input source="=&#34;Nie masz waznego id&#34;" target="decision" />
+        </zeebe:ioMapping>
+      </extensionElements>
+      <incoming>Flow_IDValid_No</incoming>
+      <outgoing>Flow_InvalidID_to_End</outgoing>
+    </serviceTask>
+    <serviceTask id="ServiceTask_SendRejectionNoDisability" name="Send Rejection Email – No Valid Disability Certificate">
+      <extensionElements>
+        <zeebe:taskDefinition type="send-decision-email" />
+        <zeebe:ioMapping>
+          <zeebe:input source="=&#34;Nie znaleziono powiązań z żadną grupą wsparcia/orzeczeniem o niepełnosprawności w bazie danych&#34;" target="decision" />
+        </zeebe:ioMapping>
+      </extensionElements>
+      <incoming>Flow_Disability_Confirmed_No</incoming>
+      <outgoing>Flow_NoDisability_to_End</outgoing>
+    </serviceTask>
+    <endEvent id="EndEvent_EligibilityFailed_NotStudent" name="Eligibility Failed">
+      <incoming>Flow_NotStudent_to_End</incoming>
+      <errorEventDefinition id="ErrorEventDefinition_01we7kl" errorRef="Error_1nxzb2q" />
+    </endEvent>
+    <endEvent id="EndEvent_EmailDeliveryFailureLogged_NotStudent" name="Email Delivery Failure Logged">
+      <incoming>Flow_NotStudentHandler_to_LoggedEnd</incoming>
+      <errorEventDefinition id="ErrorEventDefinition_0iekghc" errorRef="Error_1nxzb2q" />
+    </endEvent>
+    <endEvent id="EndEvent_EligibilityFailed_InvalidID" name="Eligibility Failed">
+      <incoming>Flow_InvalidID_to_End</incoming>
+      <errorEventDefinition id="ErrorEventDefinition_0x9dt7g" errorRef="Error_1nxzb2q" />
+    </endEvent>
+    <endEvent id="EndEvent_EmailDeliveryFailureLogged_InvalidID" name="Email Delivery Failure Logged">
+      <incoming>Flow_InvalidIDHandler_to_LoggedEnd</incoming>
+      <errorEventDefinition id="ErrorEventDefinition_1mu510v" errorRef="Error_1nxzb2q" />
+    </endEvent>
+    <endEvent id="EndEvent_EligibilityFailed_NoDisability" name="Eligibility Failed">
+      <incoming>Flow_NoDisability_to_End</incoming>
+      <errorEventDefinition id="ErrorEventDefinition_0g8np5o" errorRef="Error_1nxzb2q" />
+    </endEvent>
+    <endEvent id="EndEvent_EmailDeliveryFailureLogged_NoDisability" name="Email Delivery Failure Logged">
+      <incoming>Flow_NoDisabilityHandler_to_LoggedEnd</incoming>
+      <errorEventDefinition id="ErrorEventDefinition_0bhotgu" errorRef="Error_1nxzb2q" />
+    </endEvent>
+  </process>
+  <error id="Error_EmailFailed" name="EMAIL_FAILED" errorCode="EMAIL_FAILED" />
+  <error id="Error_1nxzb2q" name="veryfication fail" errorCode="veryfication_fail" />
+  <bpmndi:BPMNDiagram id="sid-987a33b4-fb40-4ea2-830c-9b40136d945b">
+    <bpmndi:BPMNPlane id="sid-686a29f9-e6ff-4648-90d9-0dd04e955fbe" bpmnElement="Process_VerifyDisabledStudentEligibility">
+      <bpmndi:BPMNShape id="sid-B35B3B88-22EC-481E-B3B6-B19AB7DEA8FB_gui" bpmnElement="StartEvent_DisabledVerificationStarted">
+        <omgdc:Bounds x="230" y="390" width="30" height="30" />
+        <bpmndi:BPMNLabel labelStyle="sid-136462e6-9021-4726-b274-3ae3ae482b9e">
+          <omgdc:Bounds x="152.71785736083984" y="422" width="184.5642852783203" height="11" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sid-5632C9A4-44D4-4091-8AB7-75D5FCDD3EED_gui" bpmnElement="Gateway_IsStudent" isMarkerVisible="true">
+        <omgdc:Bounds x="550" y="385" width="40" height="40" />
+        <bpmndi:BPMNLabel labelStyle="sid-136462e6-9021-4726-b274-3ae3ae482b9e">
+          <omgdc:Bounds x="595" y="397" width="64.02857208251953" height="12" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sid-4BB56D84-F66C-4696-95E0-C6D3820AFC0C_gui" bpmnElement="Task_CheckStudentIDValidity">
+        <omgdc:Bounds x="670" y="470" width="100" height="80" />
+        <bpmndi:BPMNLabel labelStyle="sid-d54ee62e-6c6e-4886-93c8-c1cd9c4765a9">
+          <omgdc:Bounds x="679.8857116699219" y="496" width="80.22857666015625" height="24" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sid-BA29ECBE-DC15-477E-8006-37CBC903860D_gui" bpmnElement="Gateway_StudentIDValid" isMarkerVisible="true">
+        <omgdc:Bounds x="870" y="490" width="40" height="40" />
+        <bpmndi:BPMNLabel labelStyle="sid-136462e6-9021-4726-b274-3ae3ae482b9e">
+          <omgdc:Bounds x="915" y="502" width="95.65713500976562" height="12" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sid-D765963A-3C62-4845-BBDA-94AA9088C7C9_gui" bpmnElement="Task_CheckDisabilityCertificate">
+        <omgdc:Bounds x="1037" y="680" width="100" height="80" />
+        <bpmndi:BPMNLabel labelStyle="sid-d54ee62e-6c6e-4886-93c8-c1cd9c4765a9">
+          <omgdc:Bounds x="1045.7285766601562" y="706" width="82.5428466796875" height="24" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sid-CA4A5AD8-6571-4CC3-893E-8C63F0B246F1_gui" bpmnElement="Gateway_DisabilityConfirmed" isMarkerVisible="true">
+        <omgdc:Bounds x="1067" y="839" width="40" height="40" />
+        <bpmndi:BPMNLabel labelStyle="sid-136462e6-9021-4726-b274-3ae3ae482b9e">
+          <omgdc:Bounds x="1030.3000030517578" y="884" width="113.39999389648438" height="12" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sid-FF975A17-263A-4740-BA53-6D1AD1B6FF91_gui" bpmnElement="EndEvent_DisabledStudentVerified">
+        <omgdc:Bounds x="1210" y="984" width="28" height="28" />
+        <bpmndi:BPMNLabel labelStyle="sid-136462e6-9021-4726-b274-3ae3ae482b9e">
+          <omgdc:Bounds x="1181" y="1014" width="85" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sid-28F12DCE-FD48-4562-986F-CD959D5BD936_gui" bpmnElement="Task_HandleEmailFailure_NotStudent">
+        <omgdc:Bounds x="670" y="191.57384842523948" width="100" height="80" />
+        <bpmndi:BPMNLabel labelStyle="sid-d54ee62e-6c6e-4886-93c8-c1cd9c4765a9">
+          <omgdc:Bounds x="677.5714263916016" y="205.57384842523948" width="84.85714721679688" height="48" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sid-F706A3BE-5661-4CB0-ACBE-B007656393E9_gui" bpmnElement="Task_HandleEmailFailure_InvalidID">
+        <omgdc:Bounds x="1030" y="509.49999999999994" width="100" height="80.00000000000006" />
+        <bpmndi:BPMNLabel labelStyle="sid-d54ee62e-6c6e-4886-93c8-c1cd9c4765a9">
+          <omgdc:Bounds x="1037.5714263916016" y="523.5" width="84.85714721679688" height="48" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sid-2B8ED333-A99E-4C98-9568-EB64A2416423_gui" bpmnElement="Task_HandleEmailFailure_NoDisability">
+        <omgdc:Bounds x="727.7118873024784" y="958" width="100" height="80" />
+        <bpmndi:BPMNLabel labelStyle="sid-d54ee62e-6c6e-4886-93c8-c1cd9c4765a9">
+          <omgdc:Bounds x="735.28331369408" y="972" width="84.85714721679688" height="48" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0xxihz7_di" bpmnElement="ServiceTask_DisabledStudentCheckStatus">
+        <omgdc:Bounds x="380" y="365" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0i3h0n3_di" bpmnElement="ServiceTask_SendRejectionNotStudent">
+        <omgdc:Bounds x="670" y="36" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1ithdyl_di" bpmnElement="ServiceTask_SendRejectionInvalidID">
+        <omgdc:Bounds x="1030" y="365" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1ht7rs0_di" bpmnElement="ServiceTask_SendRejectionNoDisability">
+        <omgdc:Bounds x="922" y="958" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1cqvqjm_di" bpmnElement="EndEvent_EligibilityFailed_NotStudent">
+        <omgdc:Bounds x="962" y="58" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="942" y="101" width="76" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1hti04k_di" bpmnElement="EndEvent_EmailDeliveryFailureLogged_NotStudent">
+        <omgdc:Bounds x="954" y="222" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="935" y="265" width="74" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0oc330l_di" bpmnElement="EndEvent_EligibilityFailed_InvalidID">
+        <omgdc:Bounds x="1210" y="391" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="1186" y="421" width="76" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0ywg6rw_di" bpmnElement="EndEvent_EmailDeliveryFailureLogged_InvalidID">
+        <omgdc:Bounds x="1210" y="536" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="1187" y="566" width="74" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1950ee4_di" bpmnElement="EndEvent_EligibilityFailed_NoDisability">
+        <omgdc:Bounds x="958" y="1083" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="934" y="1113" width="76" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0um7wkx_di" bpmnElement="EndEvent_EmailDeliveryFailureLogged_NoDisability">
+        <omgdc:Bounds x="764" y="1156" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="741" y="1186" width="74" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sid-3DF2507D-7577-496F-AFC8-2BFC12A39849_gui" bpmnElement="BoundaryEvent_InvalidIDEmailError">
+        <omgdc:Bounds x="1065" y="430" width="30" height="30" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sid-A8F03C66-1413-421D-A412-52B8E9F0E75F_gui" bpmnElement="BoundaryEvent_NotStudentEmailError">
+        <omgdc:Bounds x="705" y="101" width="30" height="30" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sid-712958A2-3233-43D3-B741-6E47999E55B1_gui" bpmnElement="BoundaryEvent_NoDisabilityEmailError">
+        <omgdc:Bounds x="907" y="983" width="30" height="30" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="sid-331B5540-99FE-4535-8454-F3898E9A4D30_gui" bpmnElement="Flow_Start_to_CheckStatus">
+        <omgdi:waypoint x="260" y="405" />
+        <omgdi:waypoint x="380" y="405" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="sid-31C21A77-DE2C-4172-8A69-BEC320C927A5_gui" bpmnElement="Flow_CheckStatus_to_Gateway">
+        <omgdi:waypoint x="480" y="405" />
+        <omgdi:waypoint x="550" y="405" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="sid-43BF93E3-D18D-4604-AF5D-A94A66863B18_gui" bpmnElement="Flow_IsStudent_Yes">
+        <omgdi:waypoint x="570.5" y="425" />
+        <omgdi:waypoint x="570.5" y="510" />
+        <omgdi:waypoint x="670" y="510" />
+        <bpmndi:BPMNLabel labelStyle="sid-136462e6-9021-4726-b274-3ae3ae482b9e">
+          <omgdc:Bounds x="548" y="433" width="18" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="sid-2B5FD6AF-2384-442F-B8FE-4A075318AC50_gui" bpmnElement="Flow_NotStudent_to_End">
+        <omgdi:waypoint x="770" y="76" />
+        <omgdi:waypoint x="962" y="76" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="sid-654842ED-BA80-497F-9FB4-0FCAF069974A_gui" bpmnElement="Flow_CheckID_to_Gateway">
+        <omgdi:waypoint x="770" y="510.1466275659824" />
+        <omgdi:waypoint x="870" y="510.4398826979472" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="sid-D2E71D04-303D-44BF-9E78-0541D1A4DB0E_gui" bpmnElement="Flow_InvalidID_to_End">
+        <omgdi:waypoint x="1130" y="405" />
+        <omgdi:waypoint x="1210" y="405" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="sid-1938C871-D9B2-4AD9-8406-C79CFE19E369_gui" bpmnElement="Flow_IDValid_No">
+        <omgdi:waypoint x="891" y="491" />
+        <omgdi:waypoint x="890.5" y="405" />
+        <omgdi:waypoint x="1030" y="405" />
+        <bpmndi:BPMNLabel labelStyle="sid-136462e6-9021-4726-b274-3ae3ae482b9e">
+          <omgdc:Bounds x="896" y="468" width="15" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="sid-7ADB44CA-FF8C-48C5-B6CA-DAFD05214AC4_gui" bpmnElement="Flow_CheckDisability_to_Gateway">
+        <omgdi:waypoint x="1087.1433691756272" y="760" />
+        <omgdi:waypoint x="1087.426523297491" y="839" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="sid-7F2BA3B9-B919-4C33-8032-866D133C37AB_gui" bpmnElement="Flow_Disability_Confirmed_Yes">
+        <omgdi:waypoint x="1107" y="859.5" />
+        <omgdi:waypoint x="1224" y="859.5" />
+        <omgdi:waypoint x="1224" y="984" />
+        <bpmndi:BPMNLabel labelStyle="sid-136462e6-9021-4726-b274-3ae3ae482b9e">
+          <omgdc:Bounds x="1116" y="840" width="18" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="sid-0E5A9197-AFC8-49CD-963E-9C4B803DCCCA_gui" bpmnElement="Flow_NoDisability_to_End">
+        <omgdi:waypoint x="972" y="1038" />
+        <omgdi:waypoint x="972" y="1084" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="sid-CE83D51D-3D1B-44C0-96E5-B26E832E3982_gui" bpmnElement="Flow_IDValid_Yes">
+        <omgdi:waypoint x="890" y="530" />
+        <omgdi:waypoint x="890" y="720" />
+        <omgdi:waypoint x="1037" y="720" />
+        <bpmndi:BPMNLabel labelStyle="sid-136462e6-9021-4726-b274-3ae3ae482b9e">
+          <omgdc:Bounds x="867" y="538" width="18" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="sid-674FD50C-DE62-46D8-BAA4-B169BBAB0A20_gui" bpmnElement="Flow_NotStudentHandler_to_LoggedEnd">
+        <omgdi:waypoint x="770" y="232" />
+        <omgdi:waypoint x="862" y="232" />
+        <omgdi:waypoint x="862" y="240" />
+        <omgdi:waypoint x="954" y="240" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="sid-5EE9A63C-BCA0-45CB-88E6-2E655381D96C_gui" bpmnElement="Flow_InvalidIDHandler_to_LoggedEnd">
+        <omgdi:waypoint x="1130" y="550" />
+        <omgdi:waypoint x="1210" y="550" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="sid-EC056338-7CB3-4512-8F20-00D571E8E457_gui" bpmnElement="Flow_NoDisabilityHandler_to_LoggedEnd">
+        <omgdi:waypoint x="778" y="1038" />
+        <omgdi:waypoint x="778" y="1157" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="sid-18C85E33-9BB8-4C7D-B222-6C0B2A3BE60A_gui" bpmnElement="Flow_NoDisabilityEmailError_to_Handler">
+        <omgdi:waypoint x="907" y="998" />
+        <omgdi:waypoint x="828" y="998" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="sid-4F37B848-C70F-4CE1-95FB-1F2D5A67140C_gui" bpmnElement="Flow_NotStudentEmailError_to_Handler">
+        <omgdi:waypoint x="720" y="131" />
+        <omgdi:waypoint x="720" y="192" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="sid-0FEED939-DD1B-4FD9-82B5-FBFB5F696D8E_gui" bpmnElement="Flow_InvalidIDEmailError_to_Handler">
+        <omgdi:waypoint x="1080" y="460" />
+        <omgdi:waypoint x="1080" y="509" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="sid-F6025F4C-8031-4799-8F28-BBF38FE08880_gui" bpmnElement="Flow_IsStudent_No">
+        <omgdi:waypoint x="571" y="386" />
+        <omgdi:waypoint x="570.5" y="76" />
+        <omgdi:waypoint x="670" y="76" />
+        <bpmndi:BPMNLabel labelStyle="sid-136462e6-9021-4726-b274-3ae3ae482b9e">
+          <omgdc:Bounds x="576" y="363" width="15" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="sid-C4CBD5EA-D090-44B8-BCD9-9FED1DC0546F_gui" bpmnElement="Flow_Disability_Confirmed_No">
+        <omgdi:waypoint x="1068" y="860" />
+        <omgdi:waypoint x="972" y="859.5" />
+        <omgdi:waypoint x="972" y="958" />
+        <bpmndi:BPMNLabel labelStyle="sid-136462e6-9021-4726-b274-3ae3ae482b9e">
+          <omgdc:Bounds x="1046" y="840" width="15" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+    <bpmndi:BPMNLabelStyle id="sid-136462e6-9021-4726-b274-3ae3ae482b9e">
+      <omgdc:Font name="Arial" size="11" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" />
+    </bpmndi:BPMNLabelStyle>
+    <bpmndi:BPMNLabelStyle id="sid-d54ee62e-6c6e-4886-93c8-c1cd9c4765a9">
+      <omgdc:Font name="Arial" size="12" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" />
+    </bpmndi:BPMNLabelStyle>
+  </bpmndi:BPMNDiagram>
+</definitions>
